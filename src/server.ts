@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan')
-const moviesRouter = require('./src/api/movies');
+const moviesRouter = require('./api/movies');
 const port = 3000;
 
 app.use(express.json());

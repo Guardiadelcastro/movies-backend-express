@@ -1,20 +1,20 @@
-const fs = require('fs');
+import {readFile, writeFile} from 'fs';
 
 function loadMovies(callback) {
   const filePath = __dirname + '/../../data/movies.json';
-  fs.readFile(filePath, (err, data) => {
+  readFile(filePath, (err, data) => {
     if (err) {
       console.error('Error', err);
-      throw error
+      throw Error;
   } else {
-      callback(JSON.parse(data));
+      callback(JSON.parse(data.toString()));
     }
   });
 }
 function saveMovies(movies, callback) {
   const filePath = __dirname + '/../../data/movies.json';
   const moviesJSON = JSON.stringify(movies);
-  fs.writeFile(filePath, moviesJSON, (err, data) => {
+  writeFile(filePath, moviesJSON, err => {
     if (err) {
       console.error('Error', err);
       callback(err);

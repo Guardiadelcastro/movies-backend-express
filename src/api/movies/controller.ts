@@ -5,7 +5,7 @@ files.loadMovies(moviesData => movies = moviesData);
 
 const getMovies = () => movies;
 
-const getMovie = movieId  => movies.find(movie => movie.id === movieId);
+const getMovieById = (idToFind: string)  => movies.find(movie => movie.id === idToFind);
 
 const newMovie = (movie, callback) => {
   movie.id = `${movies.length + 1}`
@@ -34,7 +34,9 @@ const deleteMovie = (id, callback) => {
   files.saveMovies(movies, err => callback(err, movies));
 }
 
-const getLikes = () => movies.filter(movie => movie.like === true);
+const getLikes = () => {
+  movies.filter(movie => movie.like === true)
+};
 
 
 const setLikeMovie = (movieId, likeValue, callback) => {
@@ -46,7 +48,7 @@ const setLikeMovie = (movieId, likeValue, callback) => {
   files.saveMovies(movies, err => callback(err, movies));
 }
 module.exports = {
-  getMovie,
+  getMovieById,
   getMovies,
   newMovie,
   updateMovie,
