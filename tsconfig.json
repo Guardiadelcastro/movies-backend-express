@@ -1,7 +1,10 @@
 {
-  "compilerOptions":{
+  "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "target":"es6"
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es6",
+    "experimentalDecorators": true
   }
 }

@@ -1,73 +1,38 @@
+import * as express from 'express';
+import { deleteMovie, getLikes, getMovie, getMovies, newMovie, setLikeMovie, updateMovie } from "./controller";
+
 const router = express.Router();
 
-const controller = require("controller");
-
-router.get("/", (req, res) => {
-	res.json(controller.getMovies());
+router.get('/like', (req, res) => {
+  getLikes().then(movies => res.json(movies)).catch(err => res.status(500).send(err));
 });
 
-router.get("/:id", (req, res) => {
-	const movie = controller.getMovie(req.params.id);
-	res.json(movie);
+router.get('/:id', (req, res) => {
+  getMovie(req.params.id).then(movie => res.json(movie)).catch(err => res.status(500).send(err));
 });
 
-router.post("/", (req, res) => {
-	const movie = req.body;
-	controller.newMovie(movie, (err, movies) => {
-		if (err) {
-			res.error(err);
-		} else {
-			res.json(movies);
-		}
-	});
+router.get('/', (req, res) => {
+  getMovies().then(movies => res.json(movies)).catch(err => res.status(500).send(err));
 });
 
-router.put("/", (req, res) => {
-	const movie = req.body;
-	controller.updateMovie(movie, (err, movies) => {
-		if (err) {
-			res.error(err);
-		} else {
-			res.json(movies);
-		}
-	});
+router.post('/', (req, res) => {
+  newMovie(req.body).then(result => res.json(result)).catch(err => res.status(400).send(err));
 });
 
-router.delete("/:id", (req, res) => {
-	const id = req.params.id;
-	controller.deleteMovie(id, (err, movies) => {
-		if (err) {
-			res.error(err);
-		} else {
-			res.json(movies);
-		}
-	});
+router.put('/', (req, res) => {
+  updateMovie(req.body).then(movie => res.json(movie)).catch(err => res.status(400).send(err));
 });
 
-router.get("/like", (req, res) => {
-	res.json(controller.getLikes());
+router.delete('/:id', (req, res) => {
+  deleteMovie(req.params.id).then(() => res.send()).catch(err => res.status(400).send(err));
 });
 
-router.put('/like/:id', (req, res) => {
-    const movieId = req.params.id;
-    controller.setLikeMovie(movieId, true, (err, movies) => {
-      if (err) {
-        res.error(err);
-      } else {
-        res.json(movies);
-      }
-    });
-  });
-  
-  router.delete('/like/:id', (req, res) => {
-    const movieId = req.params.id
-    controller.setLikeMovie(movieId, false, (err, movies) => {
-      if (err) {
-        res.error(err);
-      } else {
-        res.json(movies);
-      }
-    });
-  });
+router.post('/like/:id', (req, res) => {
+  setLikeMovie(req.params.id, true).then(() => res.send('Done')).catch(err => res.status(400).send(err));
+});
 
-module.exports = router;
+router.delete('/like/:id', (req, res) => {
+  setLikeMovie(req.params.id, false).then(() => res.send('Done')).catch(err => res.status(400).send(err));
+});
+
+export = router;

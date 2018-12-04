@@ -1,58 +1,30 @@
-const files = require('../../utils/files');
+import { Movie } from "./model";
 
-let movies;
-files.loadMovies(moviesData => movies = moviesData);
-
-const getMovies = () => movies;
-
-const getMovieById = (idToFind: string)  => movies.find(movie => movie.id === idToFind);
-
-const newMovie = (movie, callback) => {
-  movie.id = `${movies.length + 1}`
-  movies.push(movie);
-
-  files.saveMovies(movies, err => callback(err, movies));
-};
-
-const updateMovie = (movie, callback) => {
-  const movieId = movie.id;
-  let moviePosition = movies.findIndex(movieToFind => movieToFind.id === movieId);
-  console.log(moviePosition)
-  if (moviePosition >= 0) {
-    movies[moviePosition] = movie;
-  }
-
-  files.saveMovies(movies, err => callback(err, movies));
+export function getLikes() {
+  return Movie.find({ like: true });
 }
 
-const deleteMovie = (id, callback) => {
-  const moviePosition = movies.findIndex(movieToFind => movieToFind.id === id);
-  if (moviePosition >= 0) {
-    movies.splice(moviePosition, 1)
-  }
-
-  files.saveMovies(movies, err => callback(err, movies));
+export function getMovie(movieId) {
+  return Movie.findById(movieId);
 }
 
-const getLikes = () => {
-  movies.filter(movie => movie.like === true)
-};
-
-
-const setLikeMovie = (movieId, likeValue, callback) => {
-  const movie = movies.find(movie => movie.id === movieId);
-  if (movie) {
-    movie.like = likeValue;
-  }
-
-  files.saveMovies(movies, err => callback(err, movies));
+export function getMovies() {
+  return Movie.find();
 }
-module.exports = {
-  getMovieById,
-  getMovies,
-  newMovie,
-  updateMovie,
-  deleteMovie,
-  getLikes,
-  setLikeMovie
-};
+
+export function newMovie(movie) {
+  const movieToCreate = new Movie({ ...movie });
+  return movieToCreate.save();
+}
+
+export function updateMovie(movie) {
+  return Movie.findByIdAndUpdate(movie._id, movie);
+}
+
+export function deleteMovie(movieId) {
+  return Movie.findByIdAndRemove(movieId);
+}
+
+export function setLikeMovie(movieId, likeValue) {
+  return Movie.findByIdAndUpdate(movieId, { like: likeValue });
+}
